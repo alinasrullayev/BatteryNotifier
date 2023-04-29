@@ -51,11 +51,16 @@
             switch (e.MenuItemName)
             {
                 case NotificationTray.SETTINGS_LABEL:
-                    Console.WriteLine($"{e.MenuItemName} Clicked");
+                    Settings settings = Settings.GetInstance;
+                    if (!settings.IsActive)
+                    {
+                        settings.ShowDialog();
+                    }
+
                     break;
 
                 case NotificationTray.EXIT_LABEL:
-                    Console.WriteLine($"{e.MenuItemName} Clicked");
+                    // TODO: Improve
                     Application.Exit();
                     break;
 
