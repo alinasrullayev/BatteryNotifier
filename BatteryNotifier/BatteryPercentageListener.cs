@@ -4,13 +4,12 @@ namespace BatteryNotifier
 {
     internal class BatteryPercentageListener : IBatteryPercentageListener
     {
-        private const Int32 BATTERY_PERCENTAGE_LOWER_THRESHOLD = 40;
-        private const Int32 BATTERY_PERCENTAGE_UPPER_THRESHOLD = 60;
-
         public event EventHandler<BatteryStatusChangedEventArgs>? BatteryUpperThresholdReached;
         public event EventHandler<BatteryStatusChangedEventArgs>? BatteryLowerThresholdReached;
 
         private System.Threading.Timer? timer;
+        private Int32 batteryUpperThreshold = Properties.Settings.Default.BATTERY_UPPER_THRESHOLD;
+        private Int32 batteryLowerThreshold = Properties.Settings.Default.BATTERY_LOWER_THRESHOLD;
 
         public void StartListening(int poolIntervalSeconds)
         {
@@ -60,7 +59,7 @@ namespace BatteryNotifier
                 Console.WriteLine(battery.state);
 
                 if (
-                    battery.percentage >= BATTERY_PERCENTAGE_UPPER_THRESHOLD &&
+                    battery.percentage >= batteryUpperThreshold &&
                         (
                             battery.state == BatteryState.Unknown ||
                             battery.state == BatteryState.Charging ||
@@ -79,11 +78,11 @@ namespace BatteryNotifier
                 }
 
                 if (
-                    battery.percentage <= BATTERY_PERCENTAGE_LOWER_THRESHOLD &&
+                    battery.percentage <= batteryLowerThreshold &&
                         (
                             battery.state == BatteryState.Other ||
                             battery.state == BatteryState.Low ||
-                            battery.state == BatteryState.Critical                            
+                            battery.state == BatteryState.Critical
                         )
                     )
                 {

@@ -16,10 +16,10 @@
 
             // Enable Battery Events Listener
             batteryEventListener = new BatteryPercentageListener();
-            batteryEventListener.StartListening(60);
-
             batteryEventListener.BatteryUpperThresholdReached += HandleBatteryUpperThresholdReached;
             batteryEventListener.BatteryLowerThresholdReached += HandleBatteryLowerThresholdReached;
+
+            batteryEventListener.StartListening(60);
         }
 
         private void HandleBatteryLowerThresholdReached(object? sender, BatteryStatusChangedEventArgs e)
@@ -60,13 +60,23 @@
                     break;
 
                 case NotificationTray.EXIT_LABEL:
-                    // TODO: Improve
-                    Application.Exit();
+                    ExitApplication();
                     break;
 
                 default:
                     throw new NotImplementedException();
             }
+        }
+
+        public static void RestartApplication()
+        {
+            Application.Restart();
+            Environment.Exit(0);    
+        }
+
+        public static void ExitApplication()
+        {
+            Application.Exit();
         }
     }
 }
