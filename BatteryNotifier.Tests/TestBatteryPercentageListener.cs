@@ -7,7 +7,7 @@ public class TestBatteryPercentageListener
     [Fact]
     public void TestLowBatteryAlertIsTriggered()
     {
-        var are = new AutoResetEvent(false);
+        AutoResetEvent are = new AutoResetEvent(false);
 
         BatteryInformation battery1 = new BatteryInformation();
         battery1.deviceID = "1";
