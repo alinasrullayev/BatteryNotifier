@@ -10,7 +10,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  test:    
+  release:    
     runs-on: windows-latest  
     strategy:
         matrix:
@@ -29,4 +29,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with: 
           name: application_artifact
-          path: BatteryNotifier/release/
+          path: D:\a\BatteryNotifier\BatteryNotifier\release\
