@@ -15,7 +15,7 @@
             notificationTray.ContextMenuButtonClicked += HandleContextMenuButtonClick;
 
             // Enable Battery Events Listener
-            batteryEventListener = new BatteryPercentageListener();
+            batteryEventListener = new BatteryPercentageListener(new BatteryRepository());
             batteryEventListener.BatteryUpperThresholdReached += HandleBatteryUpperThresholdReached;
             batteryEventListener.BatteryLowerThresholdReached += HandleBatteryLowerThresholdReached;
 
@@ -51,7 +51,8 @@
             switch (e.MenuItemName)
             {
                 case NotificationTray.SETTINGS_LABEL:
-                    Settings settings = Settings.GetInstance;
+                    Settings settings = Settings.GetInstance();
+
                     if (!settings.IsActive)
                     {
                         settings.ShowDialog();
