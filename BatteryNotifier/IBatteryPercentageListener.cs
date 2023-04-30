@@ -2,7 +2,7 @@
 
 namespace BatteryNotifier
 {
-    internal interface IBatteryPercentageListener : IBatteryEventListener
+    public interface IBatteryPercentageListener : IBatteryEventListener
     {
         event EventHandler<BatteryStatusChangedEventArgs>? BatteryLowerThresholdReached;
         event EventHandler<BatteryStatusChangedEventArgs>? BatteryUpperThresholdReached;

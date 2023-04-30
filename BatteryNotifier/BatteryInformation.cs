@@ -1,19 +1,19 @@
 ﻿namespace BatteryNotifier
 {
-    internal class BatteryInformation
+    public class BatteryInformation
     {
-        internal string? deviceID { get; set; }
+        public string? deviceID { get; set; }
 
-        internal int percentage { get; set; }
+        public int percentage { get; set; }
 
-        internal string? health { get; set; }
+        public string? health { get; set; }
 
-        internal int expectedRunTime { get; set; }
+        public int expectedRunTime { get; set; }
 
-        internal BatteryState? state { get; set; }
+        public BatteryState? state { get; set; }
     }
 
-    internal enum BatteryState
+    public enum BatteryState
     {
         Other = 1,
         Unknown = 2,

@@ -1,6 +1,6 @@
 ﻿namespace BatteryNotifier
 {
-    internal interface IBatteryEventListener
+    public interface IBatteryEventListener
     {
         void StartListening(int poolIntervalSeconds);
         List<BatteryInformation> GetAllBatteries();

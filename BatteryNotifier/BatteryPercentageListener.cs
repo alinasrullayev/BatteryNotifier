@@ -92,9 +92,4 @@ namespace BatteryNotifier
             }
         }
     }
-
-    internal class BatteryStatusChangedEventArgs : EventArgs
-    {
-        public BatteryInformation? batteryInformation;
-    }
 }
