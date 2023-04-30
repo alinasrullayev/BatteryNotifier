@@ -15,7 +15,7 @@
             notificationTray.ContextMenuButtonClicked += HandleContextMenuButtonClick;
 
             // Enable Battery Events Listener
-            batteryEventListener = new BatteryPercentageListener();
+            batteryEventListener = new BatteryPercentageListener(new BatteryRepository());
             batteryEventListener.BatteryUpperThresholdReached += HandleBatteryUpperThresholdReached;
             batteryEventListener.BatteryLowerThresholdReached += HandleBatteryLowerThresholdReached;
 
