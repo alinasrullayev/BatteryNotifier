@@ -51,7 +51,8 @@
             switch (e.MenuItemName)
             {
                 case NotificationTray.SETTINGS_LABEL:
-                    Settings settings = Settings.GetInstance;
+                    Settings settings = Settings.GetInstance();
+
                     if (!settings.IsActive)
                     {
                         settings.ShowDialog();

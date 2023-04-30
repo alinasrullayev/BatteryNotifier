@@ -56,8 +56,6 @@ namespace BatteryNotifier
 
             foreach (BatteryInformation battery in allBatteries)
             {
-                Console.WriteLine(battery.state);
-
                 if (
                     battery.percentage >= batteryUpperThreshold &&
                         (

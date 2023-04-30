@@ -4,32 +4,21 @@
     {
         private static Settings? _instance;
 
-        public static Settings GetInstance
-        {
-            get
-            {
-                if (_instance == null || _instance.IsDisposed)
-                {
-                    _instance = new Settings();
-                }
-                return _instance;
-            }
-        }
         public bool IsActive = false;
 
-        public Settings()
+        private Settings()
         {
             InitializeComponent();
         }
 
-        protected override void OnShown(EventArgs e)
+        public static Settings GetInstance()
         {
-            IsActive = true;
-        }
+            if (_instance == null || _instance.IsDisposed)
+            {
+                _instance = new Settings();
+            }
 
-        protected override void OnClosed(EventArgs e)
-        {
-            IsActive &= false;
+            return _instance;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -38,6 +27,18 @@
             batteryUpperThreshold.Value = Properties.Settings.Default.BATTERY_UPPER_THRESHOLD;
 
             apply.Enabled = false;
+        }
+
+        protected override void OnActivated(EventArgs e)
+        {
+            IsActive = true;
+            base.OnActivated(e);
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            IsActive = false;
+            base.OnClosed(e);
         }
 
         private void resetToDefault_Click(object sender, EventArgs e)
