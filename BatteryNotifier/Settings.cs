@@ -68,7 +68,8 @@
 
         private void RestartApplication(object? sender, EventArgs e)
         {
-            BatteryNotifierApplicationContext.RestartApplication();
+            BatteryNotifierApplicationContext applicationContext = BatteryNotifierApplicationContext.GetInstance();
+            applicationContext.RestartApplication();
         }
 
         private void batteryLowerThreshold_ValueChanged(object sender, EventArgs e)

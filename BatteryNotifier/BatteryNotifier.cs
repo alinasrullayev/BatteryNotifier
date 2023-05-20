@@ -8,10 +8,18 @@ namespace BatteryNotifier
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+            if (
+                System.Diagnostics.Process.GetProcessesByName(
+                    System.IO.Path.GetFileNameWithoutExtension(
+                        System.Reflection.Assembly.GetEntryAssembly().Location
+                    )
+                ).Count() > 1
+            )
+            {
+
+            }
             ApplicationConfiguration.Initialize();
-            Application.Run(new BatteryNotifierApplicationContext());
+            Application.Run(BatteryNotifierApplicationContext.GetInstance());
         }
     }
 }

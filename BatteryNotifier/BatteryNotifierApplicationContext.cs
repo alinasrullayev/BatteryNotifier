@@ -2,24 +2,52 @@
 {
     internal class BatteryNotifierApplicationContext : ApplicationContext
     {
+        private static BatteryNotifierApplicationContext? _instance;
+        private NotificationTray _notificationTray;
+        private BatteryPercentageListener _batteryEventListener;
 
-        private NotificationTray notificationTray;
-        private BatteryPercentageListener batteryEventListener;
-
-        public BatteryNotifierApplicationContext()
+        public static BatteryNotifierApplicationContext GetInstance()
         {
-            // Enable Notification Tray
-            notificationTray = new NotificationTray();
+            if (_instance == null)
+            {
+                _instance = new BatteryNotifierApplicationContext();
+            }
 
-            notificationTray.SetVisibility(true);
-            notificationTray.ContextMenuButtonClicked += HandleContextMenuButtonClick;
+            return _instance;
+        }
+
+        private BatteryNotifierApplicationContext()
+        {
+            if (
+                System.Diagnostics.Process.GetProcessesByName(
+                    Path.GetFileNameWithoutExtension(
+                        System.Reflection.Assembly.GetEntryAssembly()?.Location
+                    )
+                ).Count() > 1
+            )
+            {
+                DialogResult dialogResult = MessageBox.Show(
+                    "Only one instance of app can run at the same time",
+                    "BatteryNotifier"
+                );
+                if (dialogResult == DialogResult.OK)
+                {
+                    ExitApplication();
+                }
+            }
+
+            // Enable Notification Tray
+            _notificationTray = new NotificationTray();
+
+            _notificationTray.SetVisibility(true);
+            _notificationTray.ContextMenuButtonClicked += HandleContextMenuButtonClick;
 
             // Enable Battery Events Listener
-            batteryEventListener = new BatteryPercentageListener(new BatteryRepository());
-            batteryEventListener.BatteryUpperThresholdReached += HandleBatteryUpperThresholdReached;
-            batteryEventListener.BatteryLowerThresholdReached += HandleBatteryLowerThresholdReached;
+            _batteryEventListener = new BatteryPercentageListener(new BatteryRepository());
+            _batteryEventListener.BatteryUpperThresholdReached += HandleBatteryUpperThresholdReached;
+            _batteryEventListener.BatteryLowerThresholdReached += HandleBatteryLowerThresholdReached;
 
-            batteryEventListener.StartListening(60);
+            _batteryEventListener.StartListening(60);
         }
 
         private void HandleBatteryLowerThresholdReached(object? sender, BatteryStatusChangedEventArgs e)
@@ -27,11 +55,11 @@
             BatteryInformation? batteryInformation = e.batteryInformation;
 
             string title = $"Battery Warning: \n{batteryInformation?.deviceID}";
-            string message = "" +               
-                $"Battery percentage is {batteryInformation?.percentage}%, please plug in charger\n" +                
+            string message = "" +
+                $"Battery percentage is {batteryInformation?.percentage}%, please plug in charger\n" +
                 $"Remaining Time: {batteryInformation?.expectedRunTime} minutes\n";
 
-            notificationTray.SendNotification(title, message);
+            _notificationTray.SendNotification(title, message);
         }
 
         private void HandleBatteryUpperThresholdReached(object? sender, BatteryStatusChangedEventArgs e)
@@ -41,9 +69,9 @@
             string title = $"Battery Warning: \n{batteryInformation?.deviceID}";
             string message = "" +
                 $"Battery percentage is {batteryInformation?.percentage}%, please disconnect the charger\n" +
-                $"Remaining Time: {batteryInformation?.expectedRunTime} minutes\n";            
+                $"Remaining Time: {batteryInformation?.expectedRunTime} minutes\n";
 
-            notificationTray.SendNotification(title, message);
+            _notificationTray.SendNotification(title, message);
         }
 
         private void HandleContextMenuButtonClick(object? sender, ContextMenuButtonClickedEventArgs e)
@@ -69,14 +97,15 @@
             }
         }
 
-        public static void RestartApplication()
+        public void RestartApplication()
         {
             Application.Restart();
-            Environment.Exit(0);    
+            Environment.Exit(0);
         }
 
-        public static void ExitApplication()
+        public void ExitApplication()
         {
+            _notificationTray.SetVisibility(false);
             Application.Exit();
         }
     }
